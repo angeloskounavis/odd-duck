@@ -9,6 +9,8 @@ let image3 = document.querySelector('section img:nth-child(3)');
 
 let howManyTimesUserHasVoted = 0;
 let maxNumberOfVotes = 25;
+let indexArray = [];
+let allOddDuck = [];
 
 
 function OddDuck(name, fileExtension = 'jpg') {
@@ -16,12 +18,10 @@ function OddDuck(name, fileExtension = 'jpg') {
   this.fileExtension = fileExtension;
   this.src = `assets/${this.name}.${this.fileExtension}`;
   this.views = 0;
-  this.clicks =0;
+  this.clicks = 0;
   allOddDuck.push(this);
 }
-
-let allOddDuck = [];
-console.log(allOddDuck);
+// console.log(allOddDuck);
 
 let bag = new OddDuck('bag');
 let banana = new OddDuck('banana');
@@ -32,12 +32,12 @@ let bubblegum = new OddDuck('bubblegum');
 let chair = new OddDuck('chair');
 let cthulhu = new OddDuck('cthulhu');
 let dogduck = new OddDuck('dog-duck');
-let dragon = new OddDuck('dog-duck');
+let dragon = new OddDuck('dragon');
 let pen = new OddDuck('pen');
 let petsweep = new OddDuck('pet-sweep');
 let scissors = new OddDuck('scissors');
 let shark = new OddDuck('shark');
-let sweep = new OddDuck('sweep','png');
+let sweep = new OddDuck('sweep', 'png');
 let tauntaun = new OddDuck('tauntaun');
 let unicorn = new OddDuck('unicorn');
 let watercan = new OddDuck('water-can');
@@ -49,16 +49,23 @@ function selectRandomOddDuck() {
   return Math.floor(Math.random() * allOddDuck.length);
 }
 
-function renderOddDuck() {
-  let duck1 = selectRandomOddDuck();
-  let duck2 = selectRandomOddDuck();
-  let duck3 = selectRandomOddDuck();
-  console.log(duck1, duck2, duck3);
+// function renderOddDuck(){
 
-  while (duck1 === duck2 || duck1 === duck3 || duck2 === duck3) {
-    duck3 = selectRandomOddDuck();
-    duck2 = selectRandomOddDuck();
+function renderOddDuck() {
+  let previousArray = indexArray;
+  indexArray = [];
+  while (indexArray.length < 3) {
+    let ranNum = selectRandomOddDuck();
+    if (!indexArray.includes(ranNum) && !previousArray.includes(ranNum)) {
+      indexArray.push(ranNum);
+    }
   }
+
+  let duck1 = indexArray[0];
+  let duck2 = indexArray[1];
+  let duck3 = indexArray[2];
+
+  console.log(duck1, duck2, duck3);
 
   image1.src = allOddDuck[duck1].src;
   image1.alt = allOddDuck[duck1].name;
@@ -97,15 +104,74 @@ function handleClick(event) {
     myContainer.removeEventListener('click', handleClick);
     resultBtn.className = 'clicks-allowed';
     resultBtn.addEventListener('click', renderResults);
+    renderChart();
   } else {
     renderOddDuck();
   }
-  console.log(allOddDuck);
 }
 
+
+
+//creating a chartjs constructor
+
+function renderChart() {
+
+  let duckNames = [];
+  let duckViews = [];
+  let duckClicks = [];
+  for (let i = 0; i < allOddDuck.length; i++) {
+    duckNames.push(allOddDuck[i].name);
+    duckViews.push(allOddDuck[i].views);
+    duckClicks.push(allOddDuck[i].clicks);
+  }
+
+  const data = {
+    labels: duckNames,
+    datasets: [{
+
+      label: 'Number Of Views',
+      data: duckViews,
+      backgroundColor: [
+        'white'
+      ],
+      // borderColor: [
+      //   'rgb(255, 99, 132)'
+      // ],
+      // borderWidth: 1
+    },
+    {
+      label: 'Number Of Votes',
+      data: duckClicks,
+      backgroundColor: [
+        'green'
+      ],
+      // borderColor: [
+      //   'rgb(255, 159, 64)'
+      // ],
+      borderWidth: 1
+    }
+    ]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    },
+  };
+
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+
+}
 
 myContainer.addEventListener('click', handleClick);
 
 renderOddDuck();
-
-
