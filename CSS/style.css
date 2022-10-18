@@ -39,6 +39,7 @@ main {
   grid-row-start: 1;
   grid-row-end: 1;
   padding-bottom: 1rem;
+  
 }
 
 section {
@@ -88,5 +89,5 @@ section + div.clicks-allowed {
 
 
 section + div.clicks-allowed:hover {
-  background-color: rgb(211, 187, 175);
+  background-color: white
 }
