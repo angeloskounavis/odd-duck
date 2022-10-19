@@ -13,36 +13,15 @@ let indexArray = [];
 let allOddDuck = [];
 
 
-function OddDuck(name, fileExtension = 'jpg') {
+function OddDuck(name, fileExtension = 'jpg', views = 0, clicks = 0) {
   this.name = name;
   this.fileExtension = fileExtension;
   this.src = `assets/${this.name}.${this.fileExtension}`;
-  this.views = 0;
-  this.clicks = 0;
+  this.views = views;
+  this.clicks = clicks;
   allOddDuck.push(this);
 }
 // console.log(allOddDuck);
-
-let bag = new OddDuck('bag');
-let banana = new OddDuck('banana');
-let boots = new OddDuck('boots');
-let bathroom = new OddDuck('bathroom');
-let breakfast = new OddDuck('breakfast');
-let bubblegum = new OddDuck('bubblegum');
-let chair = new OddDuck('chair');
-let cthulhu = new OddDuck('cthulhu');
-let dogduck = new OddDuck('dog-duck');
-let dragon = new OddDuck('dragon');
-let pen = new OddDuck('pen');
-let petsweep = new OddDuck('pet-sweep');
-let scissors = new OddDuck('scissors');
-let shark = new OddDuck('shark');
-let sweep = new OddDuck('sweep', 'png');
-let tauntaun = new OddDuck('tauntaun');
-let unicorn = new OddDuck('unicorn');
-let watercan = new OddDuck('water-can');
-let wineglass = new OddDuck('wine-glass');
-
 
 
 function selectRandomOddDuck() {
@@ -105,6 +84,7 @@ function handleClick(event) {
     resultBtn.className = 'clicks-allowed';
     resultBtn.addEventListener('click', renderResults);
     renderChart();
+    storeOddDuck();
   } else {
     renderOddDuck();
   }
@@ -134,20 +114,14 @@ function renderChart() {
       backgroundColor: [
         'white'
       ],
-      // borderColor: [
-      //   'rgb(255, 99, 132)'
-      // ],
-      // borderWidth: 1
+
     },
     {
       label: 'Number Of Votes',
       data: duckClicks,
       backgroundColor: [
-        'green'
+        'yellow'
       ],
-      // borderColor: [
-      //   'rgb(255, 159, 64)'
-      // ],
       borderWidth: 1
     }
     ]
@@ -174,4 +148,66 @@ function renderChart() {
 
 myContainer.addEventListener('click', handleClick);
 
-renderOddDuck();
+
+
+
+
+// new projects
+
+
+
+function storeOddDuck() {
+
+  let stringfyDucks = JSON.stringify(allOddDuck);
+
+  localStorage.setItem('oddDuck', stringfyDucks);
+}
+
+
+
+// this.name = name;
+// this.fileExtension = fileExtension;
+// this.src = `assets/${this.name}.${this.fileExtension}`;
+// this.views = 0;
+// this.clicks = 0;
+
+function getOddDucks() {
+  // check if local storage has orders. If it does unpack them
+  let storedDucks = localStorage.getItem('oddDuck');
+
+  if (storedDucks) {
+    let parseOrders = JSON.parse(storedDucks);
+
+    for (let oddDuck of parseOrders) {
+      let name = oddDuck.name;
+      let fileExtension = oddDuck.fileExtension;
+      let views = oddDuck.views;
+      let clicks = oddDuck.clicks;
+      new OddDuck(name, fileExtension, views, clicks)
+    }
+  }
+  else {
+    new OddDuck('bag');
+    new OddDuck('banana');
+    new OddDuck('boots');
+    new OddDuck('bathroom');
+    new OddDuck('breakfast');
+    new OddDuck('bubblegum');
+    new OddDuck('chair');
+    new OddDuck('cthulhu');
+    new OddDuck('dog-duck');
+    new OddDuck('dragon');
+    new OddDuck('pen');
+    new OddDuck('pet-sweep');
+    new OddDuck('scissors');
+    new OddDuck('shark');
+    new OddDuck('sweep', 'png');
+    new OddDuck('tauntaun');
+    new OddDuck('unicorn');
+    new OddDuck('water-can');
+    new OddDuck('wine-glass');
+
+  }
+  renderOddDuck();
+}
+getOddDucks();
