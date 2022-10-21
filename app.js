@@ -183,7 +183,7 @@ function getOddDucks() {
       let fileExtension = oddDuck.fileExtension;
       let views = oddDuck.views;
       let clicks = oddDuck.clicks;
-      new OddDuck(name, fileExtension, views, clicks)
+      new OddDuck(name, fileExtension, views, clicks);
     }
   }
   else {
